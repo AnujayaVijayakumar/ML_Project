@@ -80,8 +80,8 @@ def make_windows(
     if not isinstance(df.index, pd.TimedeltaIndex):
         raise TypeError("df.index must be a TimedeltaIndex (time-based index).")
 
-    win = int(round(fps * win_s))
-    hop = int(round(fps * hop_s))
+    win = int(round(fps * win_s)) #30
+    hop = int(round(fps * hop_s)) #6
     if win < 2:
         raise ValueError("win_s too small (window must be >= 2 frames).")
     if hop < 1:
