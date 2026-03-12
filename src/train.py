@@ -24,12 +24,25 @@ def train_loop(
     ytr: np.ndarray,
     Xva: np.ndarray,
     yva: np.ndarray,
-    lr: float = 1e-2,
-    epochs: int = 20,
-    batch: int = 64,
+    lr: float = 1e-3,
+    epochs: int = 40,
+    batch: int = 32,
     seed: int = 0,
-) -> MLP:
+    patience: int = 8,
+):
     rng = np.random.default_rng(seed)
+
+    best_val_acc = -1.0
+    best_val_loss = np.inf
+    best_epoch = 0
+    wait = 0
+
+    best_state = {
+        "W1": model.W1.copy(),
+        "b1": model.b1.copy(),
+        "W2": model.W2.copy(),
+        "b2": model.b2.copy(),
+    }
 
     for ep in range(1, epochs + 1):
         idx = rng.permutation(len(Xtr))
@@ -57,11 +70,50 @@ def train_loop(
             f"train_loss={tr_loss:.3f} | val_loss={va_loss:.3f}"
         )
 
-    return model
+        improved = False
 
+        # primary criterion: better val accuracy
+        if va_acc > best_val_acc:
+            improved = True
+        # tie-breaker: same val_acc but lower val_loss
+        elif va_acc == best_val_acc and va_loss < best_val_loss:
+            improved = True
+
+        if improved:
+            best_val_acc = va_acc
+            best_val_loss = va_loss
+            best_epoch = ep
+            wait = 0
+
+            best_state["W1"] = model.W1.copy()
+            best_state["b1"] = model.b1.copy()
+            best_state["W2"] = model.W2.copy()
+            best_state["b2"] = model.b2.copy()
+        else:
+            wait += 1
+
+        if wait >= patience:
+            print(f"\nEarly stopping at epoch {ep}. Best epoch was {best_epoch}.")
+            break
+
+    # restore best weights
+    model.W1 = best_state["W1"]
+    model.b1 = best_state["b1"]
+    model.W2 = best_state["W2"]
+    model.b2 = best_state["b2"]
+
+    print(
+        f"\nRestored best model from epoch {best_epoch} "
+        f"(val_acc={best_val_acc:.3f}, val_loss={best_val_loss:.3f})"
+    )
+
+    return model
 
 def main():
     base = Path(__file__).resolve().parents[1]  # .../final_project
+    debug_dir = base / "data" / "debug_frames"
+    debug_dir.mkdir(exist_ok=True)
+
 
     train_videos = [
         VideoSpec(
@@ -71,8 +123,8 @@ def main():
             "ahad",
         ),
         VideoSpec(
-            str(base / "data" / "anujaya_data" / "anu_swipe_right_3.mp4"),
-            str(base / "data" / "anujaya_data" / "anu_swipe_right_annotation_3.txt"),
+            str(base / "data" / "anujaya_data" / "anu_swipe_right_2.mp4"),
+            str(base / "data" / "anujaya_data" / "anu_swipe_right_annotation_2.txt"),
             False,
             "anu",
         ),
@@ -82,18 +134,8 @@ def main():
             True,
             "shahzaib",
         ),
-        VideoSpec(
-            str(base / "data" / "ahad_data" / "ahad_swipe_left.mp4"),
-            str(base / "data" / "ahad_data" / "ahad_swipe_left_annotation.txt"),
-            True,
-            "ahad",
-        ),
-        VideoSpec(
-            str(base / "data" / "shahzaib_data" / "shahzaib_swipe_left.mp4"),
-            str(base / "data" / "shahzaib_data" / "shahzaib_swipe_left_annotation.txt"),
-            True,
-            "shahzaib",
-        ),
+
+
         VideoSpec(
             str(base / "data" / "anujaya_data" / "anu_swipe_left_2.mp4"),
             str(base / "data" / "anujaya_data" / "anu_swipe_left_annotation_2.txt"),
@@ -102,15 +144,22 @@ def main():
         ),
 
         VideoSpec(
+            str(base / "data" / "ahad_data" / "ahad_swipe_left.mp4"),
+            str(base / "data" / "ahad_data" / "ahad_swipe_left_annotation.txt"),
+            True,
+            "ahad",
+        ),
+
+        VideoSpec(
             str(base / "data" / "shahzaib_data" / "shahzaib_rotate.mp4"),
             str(base / "data" / "shahzaib_data" / "shahzaib_rotate_annotation.txt"),
-            False,
+            True,
             "shahzaib",
         ),
         VideoSpec(
             str(base / "data" / "ahad_data" / "ahad_rotate.mp4"),
             str(base / "data" / "ahad_data" / "ahad_rotate_annotation.txt"),
-            False,
+            True,
             "ahad",
         ),
         VideoSpec(
@@ -121,25 +170,28 @@ def main():
         ),
 
 
+
     ]
 
     val_videos = [
 
         VideoSpec(
-            str(base / "data" / "anujaya_data" / "anu_swipe_right_2.mp4"),
-            str(base / "data" / "anujaya_data" / "anu_swipe_right_annotation_2.txt"),
+            str(base / "data" / "anujaya_data" / "anu_swipe_right_3.mp4"),
+            str(base / "data" / "anujaya_data" / "anu_swipe_right_annotation_3.txt"),
             False,
             "anu",
         ),
+
         VideoSpec(
-            str(base / "data" / "ahad_data" / "ahad_swipe_left.mp4"),
-            str(base / "data" / "ahad_data" / "ahad_swipe_left_annotation.txt"),
+            str(base / "data" / "shahzaib_data" / "shahzaib_swipe_left.mp4"),
+            str(base / "data" / "shahzaib_data" / "shahzaib_swipe_left_annotation.txt"),
             True,
-            "ahad",
+            "shahzaib",
         ),
+
         VideoSpec(
-            str(base / "data" / "anujaya_data" / "anu_rotate.mp4"),
-            str(base / "data" / "anujaya_data" / "anu_rotate_annotation.txt"),
+            str(base / "data" / "anujaya_data" / "anu_rotate_3.mp4"),
+            str(base / "data" / "anujaya_data" / "anu_rotate_annotation_3.txt"),
             False,
             "anu",
         ),
@@ -154,14 +206,42 @@ def main():
     # -------------------------
     # Preprocess + compact features
     # -------------------------
-    train_processed = [
+    train_processed = []
+
+    for video_spec, frames in zip(train_videos, train_frames):
+        df = preprocess_pipeline(frames, target_fps=30)
+        df = build_compact_features(df)
+
+        # ----------------------------
+        # SAVE FRAME CSV FOR DEBUG
+        # ----------------------------
+        video_name = Path(video_spec.video_path).stem
+        out_csv = debug_dir / f"{video_name}_frames.csv"
+        df.to_csv(out_csv, index=False)
+
+        train_processed.append(df)
+
+    """train_processed = [
         build_compact_features(preprocess_pipeline(df, target_fps=30))
         for df in train_frames
-    ]
-    val_processed = [
+    ]"""
+
+    val_processed = []
+
+    for video_spec, frames in zip(val_videos, val_frames):
+        df = preprocess_pipeline(frames, target_fps=30)
+        df = build_compact_features(df)
+
+        video_name = Path(video_spec.video_path).stem
+        out_csv = debug_dir / f"{video_name}_frames.csv"
+        df.to_csv(out_csv, index=False)
+
+        val_processed.append(df)
+
+    """val_processed = [
         build_compact_features(preprocess_pipeline(df, target_fps=30))
         for df in val_frames
-    ]
+    ]"""
 
     # -------------------------
     # Windowing
@@ -169,16 +249,16 @@ def main():
     Xtr, ytr, feat_cols = build_dataset(
         train_processed,
         fps=30,
-        win_s=1.0,
-        hop_s=0.2,
+        win_s=0.8,
+        hop_s=0.1,
         majority=0.6,
     )
 
     Xva, yva, _ = build_dataset(
         val_processed,
         fps=30,
-        win_s=1.0,
-        hop_s=0.2,
+        win_s=0.8,
+        hop_s=0.1,
         majority=0.6,
         feature_cols=feat_cols,
     )
@@ -212,7 +292,7 @@ def main():
     # -------------------------
     model = MLP(
         in_dim=Xtr.shape[1],
-        hidden_dim=64,
+        hidden_dim=32,
         out_dim=len(LABELS),
         seed=0,
     )
@@ -223,12 +303,12 @@ def main():
         ytr,
         Xva,
         yva,
-        lr=1e-2,
+        lr=1e-3,
         epochs=40,
         batch=32,
         seed=0,
+        patience=8,
     )
-
     # -------------------------
     # Final evaluation
     # -------------------------
