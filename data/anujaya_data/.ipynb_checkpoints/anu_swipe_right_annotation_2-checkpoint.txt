@@ -1,0 +1,6 @@
+Begin Time - hh:mm:ss.ms	Begin Time - ss.msec	End Time - hh:mm:ss.ms	End Time - ss.msec	Duration - hh:mm:ss.ms	Duration - ss.msec	default
+00:00:00.410	0.41	00:00:02.140	2.14	00:00:01.730	1.73	swipe_right [a1]
+00:00:02.580	2.58	00:00:03.970	3.97	00:00:01.390	1.39	swipe_right [a2]
+00:00:04.400	4.4	00:00:06.060	6.06	00:00:01.660	1.66	swipe_right [a3]
+00:00:06.370	6.37	00:00:07.990	7.99	00:00:01.620	1.62	swipe_right [a4]
+00:00:08.400	8.4	00:00:10.380	10.38	00:00:01.980	1.98	swipe_right [a5]
