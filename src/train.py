@@ -123,10 +123,10 @@ def main():
             "ahad",
         ),
         VideoSpec(
-            str(base / "data" / "anujaya_data" / "anu_swipe_right_2.mp4"),
-            str(base / "data" / "anujaya_data" / "anu_swipe_right_annotation_2.txt"),
-            False,
-            "anu",
+            str(base / "data" / "ahad_data" / "ahad_swipe_right_2.mp4"),
+            str(base / "data" / "ahad_data" / "ahad_swipe_right_annotation_2.txt"),
+            True,
+            "ahad",
         ),
         VideoSpec(
             str(base / "data" / "shahzaib_data" / "shahzaib_swipe_right.mp4"),
@@ -137,51 +137,17 @@ def main():
 
 
         VideoSpec(
-            str(base / "data" / "anujaya_data" / "anu_swipe_left_2.mp4"),
-            str(base / "data" / "anujaya_data" / "anu_swipe_left_annotation_2.txt"),
-            False,
-            "anu",
-        ),
-
-        VideoSpec(
             str(base / "data" / "ahad_data" / "ahad_swipe_left.mp4"),
             str(base / "data" / "ahad_data" / "ahad_swipe_left_annotation.txt"),
             True,
             "ahad",
         ),
-
         VideoSpec(
-            str(base / "data" / "shahzaib_data" / "shahzaib_rotate.mp4"),
-            str(base / "data" / "shahzaib_data" / "shahzaib_rotate_annotation.txt"),
+            str(base / "data" / "shahzaib_data" / "shahzaib_swipe_left_2.mp4"),
+            str(base / "data" / "shahzaib_data" / "shahzaib_swipe_left_annotation_2.txt"),
             True,
             "shahzaib",
         ),
-        VideoSpec(
-            str(base / "data" / "ahad_data" / "ahad_rotate.mp4"),
-            str(base / "data" / "ahad_data" / "ahad_rotate_annotation.txt"),
-            True,
-            "ahad",
-        ),
-        VideoSpec(
-            str(base / "data" / "anujaya_data" / "anu_rotate_2.mp4"),
-            str(base / "data" / "anujaya_data" / "anu_rotate_annotation_2.txt"),
-            False,
-            "anu",
-        ),
-
-
-
-    ]
-
-    val_videos = [
-
-        VideoSpec(
-            str(base / "data" / "anujaya_data" / "anu_swipe_right_3.mp4"),
-            str(base / "data" / "anujaya_data" / "anu_swipe_right_annotation_3.txt"),
-            False,
-            "anu",
-        ),
-
         VideoSpec(
             str(base / "data" / "shahzaib_data" / "shahzaib_swipe_left.mp4"),
             str(base / "data" / "shahzaib_data" / "shahzaib_swipe_left_annotation.txt"),
@@ -190,10 +156,51 @@ def main():
         ),
 
         VideoSpec(
-            str(base / "data" / "anujaya_data" / "anu_rotate_3.mp4"),
-            str(base / "data" / "anujaya_data" / "anu_rotate_annotation_3.txt"),
+            str(base / "data" / "shahzaib_data" / "shahzaib_rotate.mp4"),
+            str(base / "data" / "shahzaib_data" / "shahzaib_rotate_annotation.txt"),
             False,
-            "anu",
+            "shahzaib",
+        ),
+        VideoSpec(
+            str(base / "data" / "ahad_data" / "ahad_rotate.mp4"),
+            str(base / "data" / "ahad_data" / "ahad_rotate_annotation.txt"),
+            False,
+            "ahad",
+        ),
+
+        VideoSpec(
+            str(base / "data" / "ahad_data" / "ahad_rotate_2.mp4"),
+            str(base / "data" / "ahad_data" / "ahad_rotate_annotation_2.txt"),
+            False,
+            "ahad",
+        ),
+
+
+
+    ]
+
+    val_videos = [
+
+
+        VideoSpec(
+            str(base / "data" / "shahzaib_data" / "shahzaib_swipe_right_2.mp4"),
+            str(base / "data" / "shahzaib_data" / "shahzaib_swipe_right_annotation_2.txt"),
+            True,
+            "shahzaib",
+        ),
+
+        VideoSpec(
+            str(base / "data" / "ahad_data" / "ahad_swipe_left_2.mp4"),
+            str(base / "data" / "ahad_data" / "ahad_swipe_left_annotation_2.txt"),
+            True,
+            "ahad",
+        ),
+
+        VideoSpec(
+            str(base / "data" / "shahzaib_data" / "shahzaib_rotate_2.mp4"),
+            str(base / "data" / "shahzaib_data" / "shahzaib_rotate_annotation_2.txt"),
+            False,
+            "shahzaib",
         ),
     ]
 

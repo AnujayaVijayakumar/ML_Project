@@ -38,10 +38,10 @@ def main():
     # Video to test
     # -------------------------
     test_video = VideoSpec(
-            str(base / "data" / "anujaya_data" / "anu_swipe_left_3.mp4"),
-            str(base / "data" / "anujaya_data" / "anu_swipe_left_annotation_3.txt"),
-            False,
-            "anu",
+            str(base / "data" / "shahzaib_data" / "shahzaib_rotate_2.mp4"),
+            str(base / "data" / "shahzaib_data" / "shahzaib_rotate_annotation_2.txt"),
+            True,
+            "shahzaib",
         )
     # -------------------------
     # Load frames
