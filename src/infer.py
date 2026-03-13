@@ -38,11 +38,12 @@ def main():
     # Video to test
     # -------------------------
     test_video = VideoSpec(
-            str(base / "data" / "shahzaib_data" / "shahzaib_rotate_2.mp4"),
-            str(base / "data" / "shahzaib_data" / "shahzaib_rotate_annotation_2.txt"),
+            str(base / "data" / "anujaya_data" / "anu_swipe_right_3.mp4"),
+            str(base / "data" / "anujaya_data" / "anu_swipe_right_annotation_3.txt"),
             True,
-            "shahzaib",
+            "anu",
         )
+
     # -------------------------
     # Load frames
     # -------------------------
@@ -51,7 +52,7 @@ def main():
     # -------------------------
     # Preprocess
     # -------------------------
-    df = preprocess_pipeline(frames, target_fps=30)
+    df = preprocess_pipeline(frames, target_fps=60)
 
     # -------------------------
     # Feature extraction
