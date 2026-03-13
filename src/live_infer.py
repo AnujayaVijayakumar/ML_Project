@@ -16,6 +16,11 @@ from final_project.src.feature_selection import build_compact_features
 from final_project.src.windowing import build_dataset, LABELS
 from final_project.src.model_mlp import MLP
 
+import json
+import urllib.request
+import urllib.error
+
+SLIDESHOW_EVENT_URL = "http://127.0.0.1:8800/event"
 
 # optional: reduce some backend log spam
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
@@ -79,6 +84,20 @@ def decide_gesture_from_predictions(pred_idx: np.ndarray, probs: np.ndarray) -> 
     conf = float(probs[-1, idx])
     return LABELS[idx], conf
 
+def send_slideshow_command(cmd: str) -> None:
+    payload = json.dumps({"command": cmd}).encode("utf-8")
+    req = urllib.request.Request(
+        SLIDESHOW_EVENT_URL,
+        data=payload,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=1.0) as resp:
+            _ = resp.read()
+        print(f"[slideshow] sent: {cmd}")
+    except urllib.error.URLError as e:
+        print(f"[slideshow] send failed: {e}")
 
 def main():
     base = pathlib.Path(__file__).resolve().parents[1]
@@ -190,6 +209,7 @@ def main():
                     and (now - last_trigger_time) >= COOLDOWN_S
                 ):
                     print(f"\nTRIGGER >>> {pred_label}\n")
+                    send_slideshow_command(pred_label)
                     last_trigger_time = now
 
             except Exception as e:
